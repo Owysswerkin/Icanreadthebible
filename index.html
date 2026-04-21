@@ -1,0 +1,156 @@
+import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight, Type, Sun, Moon } from 'lucide-react';
+
+const App = () => {
+  const [fontSize, setFontSize] = useState(28);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const stories = [
+    { 
+      title: "God Makes the World", 
+      verse: "Genesis 1", 
+      content: "In the very beginning, God made the world. He made the sky, the land, and the seas. He made the sun, moon, and stars. God said, 'Let there be light!' and there was light. He looked at everything and said, 'It is very good!'" 
+    },
+    { 
+      title: "The First Garden", 
+      verse: "Genesis 2", 
+      content: "God made a beautiful garden called Eden. He made the first man, Adam, from the dust. He made the first woman, Eve, to be his helper. They lived in the garden and took care of all the animals." 
+    },
+    { 
+      title: "The Sad Day", 
+      verse: "Genesis 3", 
+      content: "A sneaky snake talked to Eve. He told her to eat the fruit God said not to eat. Adam and Eve both ate it. This made God very sad. They had to leave the beautiful garden." 
+    },
+    { 
+      title: "Two Brothers", 
+      verse: "Genesis 4", 
+      content: "Adam and Eve had two sons named Cain and Abel. Abel loved God and gave Him his best. Cain got very angry and did a mean thing to his brother. God told Cain that doing the right thing is always better." 
+    },
+    { 
+      title: "A Big Family", 
+      verse: "Genesis 5", 
+      content: "Many years passed by. Adam’s family grew and grew. One man named Enoch was a very special friend of God. He walked with God every single day. Eventually, a man named Noah was born into the family." 
+    },
+    { 
+      title: "Noah and the Ark", 
+      verse: "Genesis 6", 
+      content: "The world became a very mean place. Only Noah still loved God. God told Noah to build a giant boat called an Ark. Noah worked hard to build it just like God said." 
+    },
+    { 
+      title: "The Great Flood", 
+      verse: "Genesis 7", 
+      content: "Noah and his family went inside the Ark. God sent two of every animal to join them. Then the rain started. It rained for forty days and forty nights until the whole earth was covered in water." 
+    },
+    { 
+      title: "The Land Dries Up", 
+      verse: "Genesis 8", 
+      content: "God sent a wind to dry up the water. Noah sent a dove to find land. Finally, the Ark landed on a tall mountain. Noah, his family, and all the animals came out to the dry ground." 
+    },
+    { 
+      title: "The Rainbow Promise", 
+      verse: "Genesis 9", 
+      content: "God made a promise to Noah. He said He would never flood the whole earth again. He put a bright rainbow in the sky as a sign. Every time we see a rainbow, we remember God’s promise." 
+    },
+    { 
+      title: "Many New Nations", 
+      verse: "Genesis 10", 
+      content: "Noah’s sons had many children. Their children had more children. They moved to different lands and started new families. This is how all the different groups of people began to fill the world again." 
+    }
+  ];
+
+  const currentStory = stories[currentPage];
+  
+  const theme = {
+    bg: isDarkMode ? "bg-slate-900" : "bg-[#FFFDE7]",
+    text: isDarkMode ? "text-yellow-400" : "text-slate-900",
+    buttonBg: isDarkMode ? "bg-yellow-400 text-slate-900" : "bg-slate-900 text-white",
+    secondaryBtn: isDarkMode ? "bg-slate-800 text-yellow-100" : "bg-gray-200 text-slate-800"
+  };
+
+  return (
+    <div className={`min-h-screen flex flex-col transition-colors duration-300 font-sans ${theme.bg} ${theme.text}`}>
+      <header className="p-2 border-b border-gray-400/30 flex justify-between items-center sticky top-0 bg-inherit z-10">
+        <div className="flex gap-2">
+          <button 
+            onClick={() => setFontSize(s => Math.min(s + 4, 60))}
+            className={`p-3 rounded-xl ${theme.secondaryBtn} flex items-center gap-2 active:scale-95 transition-transform`}
+            aria-label="Make text bigger"
+          >
+            <Type size={20} /> <span className="font-bold text-base">+</span>
+          </button>
+          <button 
+            onClick={() => setFontSize(s => Math.max(s - 4, 18))}
+            className={`p-3 rounded-xl ${theme.secondaryBtn} flex items-center gap-2 active:scale-95 transition-transform`}
+            aria-label="Make text smaller"
+          >
+            <Type size={16} /> <span className="font-bold text-base">-</span>
+          </button>
+        </div>
+        <button 
+          onClick={() => setIsDarkMode(!isDarkMode)} 
+          className={`p-3 rounded-xl ${isDarkMode ? 'bg-yellow-400 text-slate-900' : 'bg-slate-800 text-white'} active:scale-95 transition-transform`}
+          aria-label="Switch day and night mode"
+        >
+          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+      </header>
+
+      <main className="flex-1 p-6 max-w-2xl mx-auto w-full">
+        <div className="mb-4 opacity-70 font-sans font-bold uppercase border-l-4 border-current pl-4 text-lg tracking-tight">
+          {currentStory.verse}
+        </div>
+        
+        <h1 
+          className="font-sans font-black mb-6 leading-tight tracking-tight" 
+          style={{ fontSize: `${fontSize * 1.3}px` }}
+        >
+          {currentStory.title}
+        </h1>
+        
+        <p 
+          className="font-serif font-medium tracking-normal" 
+          style={{ 
+            fontSize: `${fontSize}px`, 
+            lineHeight: 1.7,
+            wordSpacing: '0.05em'
+          }}
+        >
+          {currentStory.content}
+        </p>
+      </main>
+
+      <footer className="p-4 flex justify-between items-center border-t border-gray-400/30 bg-inherit sticky bottom-0">
+        <button 
+          disabled={currentPage === 0}
+          onClick={() => { setCurrentPage(p => p - 1); window.scrollTo(0,0); }}
+          className={`flex items-center gap-2 p-4 rounded-2xl font-bold text-xl transition-all ${
+            currentPage === 0 
+              ? 'opacity-10 cursor-not-allowed grayscale' 
+              : `${theme.buttonBg} active:scale-95`
+          }`}
+        >
+          <ChevronLeft size={28} strokeWidth={3} /> <span>BACK</span>
+        </button>
+        
+        <div className="font-sans font-bold text-lg tabular-nums px-2">
+          {currentPage + 1} / {stories.length}
+        </div>
+        
+        <button 
+          disabled={currentPage === stories.length - 1}
+          onClick={() => { setCurrentPage(p => p + 1); window.scrollTo(0,0); }}
+          className={`flex items-center gap-2 p-4 rounded-2xl font-bold text-xl transition-all ${
+            currentPage === stories.length - 1 
+              ? 'opacity-10 cursor-not-allowed grayscale' 
+              : `${theme.buttonBg} active:scale-95`
+          }`}
+        >
+          <span>NEXT</span> <ChevronRight size={28} strokeWidth={3} />
+        </button>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
